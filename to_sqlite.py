@@ -6,6 +6,7 @@ import sqlite3
 from datetime import datetime
 
 from shapely.geometry import Polygon
+from shapely import wkt
 import pandas as pd
 
 
@@ -29,7 +30,7 @@ def polygon_from_footprint(footprint):
     for i in range(0, len(coords), 2):
         points.append((coords[i], coords[i+1]))
     polygon = Polygon(points)
-    return polygon.wkt
+    return wkt.dumps(polygon, rounding_precision=6)
 
 
 def to_iso601(datestring):
