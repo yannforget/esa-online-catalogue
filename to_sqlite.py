@@ -45,7 +45,7 @@ def timestamp_from_string(datestring):
     return int(date.timestamp())
 
 
-DATA_DIR = os.path.abspath('../data')
+DATA_DIR = os.path.abspath('.')
 
 conn = sqlite3.connect(os.path.join(DATA_DIR, 'catalog.db'))
 conn.enable_load_extension(True)
