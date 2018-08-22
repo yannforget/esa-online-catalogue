@@ -68,4 +68,6 @@ for collection in ['SAR_IMP_1P', 'SAR_IMS_1P', 'ASA_IMP_1P', 'ASA_IMS_1P']:
     c.executemany("INSERT INTO products (id, date, platform, swath, orbit, url, polarisation, geom) VALUES (?, ?, ?, ?, ?, ?, ?, GeomFromText(?, 4326));", data)
     conn.commit()
 
+c.execute("SELECT CreateSpatialIndex('products', 'geom');")
+
 conn.close()
