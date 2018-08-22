@@ -4,6 +4,7 @@
 import os
 import sqlite3
 from datetime import datetime
+import dateutil.parser
 
 from shapely.geometry import Polygon
 from shapely import wkt
@@ -40,8 +41,7 @@ def to_iso601(datestring):
 
 def timestamp_from_string(datestring):
     """ISO 8601 datestring to UNIX timestamp integer."""
-    datestring = to_iso601(datestring)
-    date = datetime.fromisoformat(datestring)
+    date = dateutil.parser.parse(datestring)
     return int(date.timestamp())
 
 
