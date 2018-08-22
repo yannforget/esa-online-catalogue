@@ -34,11 +34,6 @@ def polygon_from_footprint(footprint):
     return wkt.dumps(polygon, rounding_precision=6)
 
 
-def to_iso601(datestring):
-    """Convert datestring provided in the ESA catalogue to ISO 8601."""
-    return datestring[:10] + ' ' + datestring[11:-1]
-
-
 def timestamp_from_string(datestring):
     """ISO 8601 datestring to UNIX timestamp integer."""
     date = dateutil.parser.parse(datestring)
@@ -67,7 +62,8 @@ for collection in ['SAR_IMP_1P', 'SAR_IMS_1P', 'ASA_IMP_1P', 'ASA_IMS_1P']:
         products.polarisationChannels, products.footprint.map(polygon_from_footprint))
     c.executemany("INSERT INTO products (id, date, platform, swath, orbit, url, polarisation, geom) VALUES (?, ?, ?, ?, ?, ?, ?, GeomFromText(?, 4326));", data)
     conn.commit()
+    print(collection + ' sucessfully imported.')
 
 c.execute("SELECT CreateSpatialIndex('products', 'geom');")
-
+conn.commit()
 conn.close()
