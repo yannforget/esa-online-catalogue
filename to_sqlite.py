@@ -29,7 +29,7 @@ def polygon_from_footprint(footprint):
     coords = [float(coord) for coord in footprint.split(' ')]
     points = []
     for i in range(0, len(coords), 2):
-        points.append((coords[i], coords[i+1]))
+        points.append((coords[i+1], coords[i]))
     polygon = Polygon(points)
     return wkt.dumps(polygon, rounding_precision=6)
 
