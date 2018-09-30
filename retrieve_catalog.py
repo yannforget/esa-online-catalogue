@@ -62,16 +62,16 @@ def merge(directory, output_filepath):
         chunk = pd.read_csv(os.path.join(directory, f), delimiter='\t')
         products = pd.concat([products, chunk])
     products.to_csv(output_filepath)
-    for f in files:
-        os.remove(f)
     return
 
 
 if __name__ == '__main__':
-    DATA_DIR = os.path.abspath('../data')
+    DATA_DIR = os.path.abspath('data')
 
     # ERS-1 and 2. Multiple queries are required.
-    for collection in ['SAR_IMP_1P', 'SAR_IMS_1P']:
+    for collection in ['SAR_IMP_1P', 'SAR_IMS_1P', 'ASA_IMP_1P', 'ASA_IMS_1P']:
+        if os.path.isfile(os.path.join(DATA_DIR, collection + '.csv')):
+            continue
         collection_dir = os.path.join(DATA_DIR, collection)
         os.makedirs(collection_dir, exist_ok=True)
         begin_date = datetime(1991, 1, 1)
@@ -81,15 +81,3 @@ if __name__ == '__main__':
         merge(collection_dir, os.path.join(DATA_DIR, collection + '.csv'))
         shutil.rmtree(collection_dir)
 
-    # Envisat. Can be retrieved with a single query per collection.
-    for collection in ['ASA_IMP_1P', 'ASA_IMP_1P']:
-        response = query(
-            search_url=SEARCH_URL.format(collection=collection),
-            start_date='', stop_date='',
-            max_lat='', max_lon='', min_lat='', min_lon='',
-            max_results=50, orbit='', polarisations='', swath='')
-        with open(os.path.join(DATA_DIR, collection + '.tsv'), 'w') as f:
-            f.write(response.text)
-        products = pd.read_csv(os.path.join(DATA_DIR, collection + '.tsv'), delimiter='\t')
-        products.to_csv(os.path.join(DATA_DIR, collection + '.csv'))
-        os.remove(os.path.join(DATA_DIR, collection + '.tsv'))
